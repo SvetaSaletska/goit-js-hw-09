@@ -27,4 +27,4 @@ const currentDate = new Date();
 
 console.log(currentDate)
 
-const flatpickr =  flatpickr(input, {options});
+const flatpickr =  flatpickr(input, {options})
