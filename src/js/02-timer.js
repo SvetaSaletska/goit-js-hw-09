@@ -2,21 +2,18 @@ import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 import Notiflix from 'notiflix';
 
+ const input = document.querySelector('#datetime-picker');
+ const startBtn = document.querySelector('button[data-start]');
 
-const selectors = {
-  input: document.querySelector('#datetime-picker'),
-  startBtn: document.querySelector('button[data-start]'),
-}
+let timerDays = document.querySelector('span[data-days]');
+let timerHours = document.querySelector('span[data-hours]');
+let timerMinutes = document.querySelector('span[data-minutes]');
+let timerSeconds = document.querySelector('span[data-seconds]');
 
-let days = document.querySelector('span[data-days]');
-let hours = document.querySelector('span[data-hours]');
-let minutes = document.querySelector('span[data-minutes]');
-let seconds = document.querySelector('span[data-seconds]');
 
 const currentDate = new Date();
 
 startBtn.disabled = true;
-
 
 const fp = flatpickr(input, {
   enableTime: true,
@@ -24,7 +21,7 @@ const fp = flatpickr(input, {
   defaultDate: new Date(),
   minuteIncrement: 1,
   onClose(selectedDates) {
-    if (selectedDates[0].getTime () - currentDate.getTime() < 0) {
+    if (selectedDates[0].getTime() - currentDate.getTime() < 0) {
       Notiflix.Report.warning(
         'WARNING!',
         'Please choose a date in the future',
@@ -32,39 +29,71 @@ const fp = flatpickr(input, {
       );
     } else {
       startBtn.disabled = false;
-      startBtn.addEventlistener('click, () => {
-        const ')
-      let ms = selectedDates[0].getTime() - currentDate.getTime();
+      startBtn.addEventListener('click', () => {
+         const timerId = setInterval(() => {
+
+          function convertMs(ms) {
+
+            const second = 1000;
+            const minute = second * 60;
+            const hour = minute * 60;
+            const day = hour * 24;
+
+            const days = Math.floor(ms / day);
+            const hours = Math.floor((ms % day) / hour);
+            const minutes = Math.floor(((ms % day) % hour) / minute);
+            const seconds = Math.floor((((ms % day) % hour) % minute) / second);
+
+            return { days, hours, minutes, seconds };
+
+            function addLeadingZero(value) {
+              return value.toString().padStart(2, '0');
+            }
+
+          }
+          const currentTime = new Date();
+          const ms = selectedDates[0].getTime() - currentTime.getTime();
+          timerDays.textContent = addLeadingZero(convertMs(ms).days);
+          timerHours.textContent = addLeadingZero(convertMs(ms).hours);
+          timerMinutes.textContent = addLeadingZero(convertMs(ms).minutes);
+          timerSeconds.textContent = addLeadingZero(convertMs(ms).seconds);
+          if (ms < 1000) {
+            clearInterval(timerId);
+           timerHours.textContent = '00';
+           timerMinutes.textContent = '00';
+          }
+        }, 1000);
+      });
     }
-
-    setInterval(() => {
-      function convertMs(ms) {
-
-        const second = 1000;
-        const minute = second * 60;
-        const hour = minute * 60;
-        const day = hour * 24;
+  }
+});
 
 
-        const days = Math.floor(ms / day);
-        const hours = Math.floor((ms % day) / hour);
-        const minutes = Math.floor(((ms % day) % hour) / minute);
-        const seconds = Math.floor((((ms % day) % hour) % minute) / second);
+//     setInterval(() => {
+//       function convertMs(ms) {
 
-        return { days, hours, minutes, seconds };
-      }
+//         const second = 1000;
+//         const minute = second * 60;
+//         const hour = minute * 60;
+//         const day = hour * 24;
 
-      days.textContent = convertMs(ms).days;
-      hours.textContent = convertMs(ms).hours;
-      minutes.textContent = convertMs(ms).minutes;
-      seconds.textContent = convertMs(ms).seconds;
 
-      ms -= 1;
+//         const days = Math.floor(ms / day);
+//         const hours = Math.floor((ms % day) / hour);
+//         const minutes = Math.floor(((ms % day) % hour) / minute);
+//         const seconds = Math.floor((((ms % day) % hour) % minute) / second);
 
-    }, 1000)
-  },
-};
+//         return { days, hours, minutes, seconds };
+//       }
 
 
 
-console.log(currentDate)
+//       ms -= 1;
+
+//     }, 1000)
+//   },
+// };
+
+
+
+// console.log(currentDate)
