@@ -15,21 +15,29 @@ let seconds = document.querySelector('span[data-seconds]');
 
 const currentDate = new Date();
 
-const options = {
+startBtn.disabled = true;
+
+
+const fp = flatpickr(input, {
   enableTime: true,
   time_24hr: true,
   defaultDate: new Date(),
   minuteIncrement: 1,
   onClose(selectedDates) {
-    if (selectedDates[0] <= new Date()) {
-    alert('Please choose a date in the future');
+    if (selectedDates[0].getTime () - currentDate.getTime() < 0) {
+      Notiflix.Report.warning(
+        'WARNING!',
+        'Please choose a date in the future',
+        'Ok'
+      );
     } else {
       startBtn.disabled = false;
+      startBtn.addEventlistener('click, () => {
+        const ')
       let ms = selectedDates[0].getTime() - currentDate.getTime();
     }
 
     setInterval(() => {
-      startBtn.addEventListener('click', convertMs);
       function convertMs(ms) {
 
         const second = 1000;
@@ -51,9 +59,9 @@ const options = {
       minutes.textContent = convertMs(ms).minutes;
       seconds.textContent = convertMs(ms).seconds;
 
-      ms -=1;
+      ms -= 1;
 
-    })
+    }, 1000)
   },
 };
 
