@@ -15,6 +15,10 @@ const currentDate = new Date();
 
 startBtn.disabled = true;
 
+function addLeadingZero(value) {
+  return value.toString().padStart(2, '0');
+}
+
 const fp = flatpickr(input, {
   enableTime: true,
   time_24hr: true,
@@ -46,9 +50,7 @@ const fp = flatpickr(input, {
 
             return { days, hours, minutes, seconds };
 
-            function addLeadingZero(value) {
-              return value.toString().padStart(2, '0');
-            }
+
 
           }
           const currentTime = new Date();
